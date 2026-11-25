@@ -1,7 +1,3 @@
-// ================================================================
-//  🏓  PONG — игровая логика (страница game.html) — исправленная версия
-// ================================================================
-
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 const scoreLeftEl = document.getElementById('scoreLeft');
