@@ -1,3 +1,7 @@
+// ================================================================
+//  🏓  PONG — игровая логика (страница game.html) — исправленная версия
+// ================================================================
+
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 const scoreLeftEl = document.getElementById('scoreLeft');
@@ -43,22 +47,35 @@ const keys = {
     arrowdown: false
 };
 
-document.addEventListener('keydown', (e) => {
-    const key = e.key;
-    if (key === 'w' || key === 'W') { keys.w = true; e.preventDefault(); }
-    if (key === 's' || key === 'S') { keys.s = true; e.preventDefault(); }
-    if (key === 'ArrowUp') { keys.arrowup = true; e.preventDefault(); }
-    if (key === 'ArrowDown') { keys.arrowdown = true; e.preventDefault(); }
+// ---------- ОБРАБОТЧИКИ КЛАВИАТУРЫ ----------
+// Используем e.code — он не зависит от раскладки и надёжнее для стрелок
+document.addEventListener('keydown', function (e) {
+    switch (e.code) {
+        case 'KeyW':      keys.w = true;        e.preventDefault(); break;
+        case 'KeyS':      keys.s = true;        e.preventDefault(); break;
+        case 'ArrowUp':   keys.arrowup = true;  e.preventDefault(); break;
+        case 'ArrowDown': keys.arrowdown = true;e.preventDefault(); break;
+    }
 });
 
-document.addEventListener('keyup', (e) => {
-    const key = e.key;
-    if (key === 'w' || key === 'W') { keys.w = false; e.preventDefault(); }
-    if (key === 's' || key === 'S') { keys.s = false; e.preventDefault(); }
-    if (key === 'ArrowUp') { keys.arrowup = false; e.preventDefault(); }
-    if (key === 'ArrowDown') { keys.arrowdown = false; e.preventDefault(); }
+document.addEventListener('keyup', function (e) {
+    switch (e.code) {
+        case 'KeyW':      keys.w = false;        e.preventDefault(); break;
+        case 'KeyS':      keys.s = false;        e.preventDefault(); break;
+        case 'ArrowUp':   keys.arrowup = false;  e.preventDefault(); break;
+        case 'ArrowDown': keys.arrowdown = false;e.preventDefault(); break;
+    }
 });
 
+// Если окно теряет фокус — сбрасываем все клавиши, чтобы ракетка не "залипала"
+window.addEventListener('blur', function () {
+    keys.w = false;
+    keys.s = false;
+    keys.arrowup = false;
+    keys.arrowdown = false;
+});
+
+// ---------- ЗВУК ----------
 let audioCtx = null;
 
 function playHitSound() {
@@ -76,9 +93,10 @@ function playHitSound() {
         gain.gain.value = 0.1;
         osc.start();
         osc.stop(audioCtx.currentTime + 0.08);
-    } catch (e) {}
+    } catch (err) {}
 }
 
+// ---------- ЦВЕТА ----------
 function getAccentColors() {
     const isLight = document.body.classList.contains('light-theme');
     if (isLight) {
@@ -97,6 +115,7 @@ function getAccentColors() {
     };
 }
 
+// ---------- СБРОС МЯЧА ----------
 function resetBall(direction) {
     ball.x = W / 2;
     ball.y = H / 2;
@@ -120,6 +139,7 @@ function updateScoreDisplay() {
     scoreRightEl.textContent = rightPaddle.score;
 }
 
+// ---------- СТОЛКНОВЕНИЯ ----------
 function handleCollisions() {
     if (ball.y - ball.radius <= 0 || ball.y + ball.radius >= H) {
         ball.dy = -ball.dy;
@@ -173,11 +193,23 @@ function handleCollisions() {
     }
 }
 
+// ---------- ОБНОВЛЕНИЕ ----------
 function update() {
-    if (keys.w && leftPaddle.y > 0) leftPaddle.y -= leftPaddle.speed;
-    if (keys.s && leftPaddle.y + leftPaddle.h < H) leftPaddle.y += leftPaddle.speed;
-    if (keys.arrowup && rightPaddle.y > 0) rightPaddle.y -= rightPaddle.speed;
-    if (keys.arrowdown && rightPaddle.y + rightPaddle.h < H) rightPaddle.y += rightPaddle.speed;
+    // Левая ракетка (синяя — W/S)
+    if (keys.w && leftPaddle.y > 0) {
+        leftPaddle.y -= leftPaddle.speed;
+    }
+    if (keys.s && leftPaddle.y + leftPaddle.h < H) {
+        leftPaddle.y += leftPaddle.speed;
+    }
+
+    // Правая ракетка (красная — стрелки)
+    if (keys.arrowup && rightPaddle.y > 0) {
+        rightPaddle.y -= rightPaddle.speed;
+    }
+    if (keys.arrowdown && rightPaddle.y + rightPaddle.h < H) {
+        rightPaddle.y += rightPaddle.speed;
+    }
 
     ball.x += ball.dx;
     ball.y += ball.dy;
@@ -185,6 +217,7 @@ function update() {
     handleCollisions();
 }
 
+// ---------- ОТРИСОВКА ----------
 function draw() {
     ctx.clearRect(0, 0, W, H);
 
@@ -226,6 +259,7 @@ function draw() {
     ctx.shadowBlur = 0;
 }
 
+// ---------- ИГРОВОЙ ЦИКЛ ----------
 function gameLoop() {
     if (!gameRunning) return;
     update();
@@ -243,6 +277,7 @@ function initGame() {
     gameLoop();
 }
 
+// ---------- СОХРАНЕНИЕ РЕЗУЛЬТАТА ----------
 function saveGameResult() {
     if (!gameRunning) return;
     const leftScore = leftPaddle.score;
@@ -265,4 +300,5 @@ function saveGameResult() {
 
 window.addEventListener('beforeunload', saveGameResult);
 
-initGame(); 
+// ---------- СТАРТ ----------
+initGame();
