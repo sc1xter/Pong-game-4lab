@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pong — Настройки</title>
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="game-title">🏓 P<span>o</span>ng</div>
+
+        <nav class="menu-small">
+            <a href="index.html">← Меню</a>
+            <a href="game.html">▶ Играть</a>
+            <a href="leaderboard.html">🏆 Лидеры</a>
+        </nav>
+
+        <div class="settings">
+            <h3>⚙ Настройки</h3>
+
+            <div class="setting-item">
+                <div>
+                    <div class="label"><span class="emoji">🔊</span> Звук отбивания</div>
+                    <div class="desc">Вкл/Выкл звук при ударе мяча о ракетку</div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="soundToggle" checked />
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="setting-item">
+                <div>
+                    <div class="label"><span class="emoji">🎨</span> Светлая тема</div>
+                    <div class="desc">Переключение между тёмной и светлой темой</div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle" />
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+    <script src="js/theme.js"></script>
+    <script>
+        document.getElementById('soundToggle').addEventListener('change', function () {
+            localStorage.setItem('pong_sound_enabled', JSON.stringify(this.checked));
+            window.soundEnabled = this.checked;
+        });
+        document.getElementById('themeToggle').addEventListener('change', function () {
+            localStorage.setItem('pong_light_theme', JSON.stringify(this.checked));
+            document.body.classList.toggle('light-theme', this.checked);
+        });
+    </script>
+</body>
+</html>

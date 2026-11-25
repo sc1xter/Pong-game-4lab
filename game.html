@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pong — Игра</title>
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="game-title">🏓 P<span>o</span>ng</div>
+
+        <nav class="menu-small">
+            <a href="index.html">← Меню</a>
+            <a href="leaderboard.html">🏆 Лидеры</a>
+            <a href="settings.html">⚙ Настройки</a>
+        </nav>
+
+        <div id="gameScreen">
+            <div class="scoreboard">
+                <span id="scoreLeft">0</span>
+                <span style="color:#555;">|</span>
+                <span id="scoreRight">0</span>
+            </div>
+            <canvas id="pongCanvas" width="800" height="450"></canvas>
+            <div class="controls-info">
+                <div><kbd>W</kbd> <kbd>S</kbd> — левая</div>
+                <div><kbd>↑</kbd> <kbd>↓</kbd> — правая</div>
+                <a class="exit-btn" href="index.html">✕ Выйти</a>
+            </div>
+        </div>
+    </div>
+    <script src="js/theme.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
